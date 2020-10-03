@@ -7,7 +7,7 @@ var textAreaEl = document.querySelectorAll('textarea');
 var m = moment().format('MMMM Do YYYY, h:mm:ss a');
 var theCurrentDate = m.toString();
 // Variable for hour format to be compared against hoursOfDay
-var currentHour = moment().format("H")
+var currentHour = moment().format("HH")
 var currentHourString = currentHour.toString();
 console.log('current hour', currentHourString);
 
@@ -20,26 +20,30 @@ function displayCurrentDate() {
 var hoursOfDay = ["09", "10", "11", "12", "13", "14", "15", "16", "17"];
 
 function renderCalendar() {
-// ??? Console Logs Correctly but always sets last class ???
-    for (i = 0; i < hoursOfDay.length; i++){
-    $('textarea').attr("hour", hoursOfDay[i]);
-    var assignedHour = $('textarea').attr("hour");
-        
-    if (currentHourString > assignedHour) {
-        console.log('in the past', assignedHour)
-        $('textarea').addClass('past');
-        
+  // Create variable textAreaArray to reference individual textareas
+    var textAreaArray = $('textarea');
+    // Each loop for textAreaArray
+    textAreaArray.each(function(i){
+    // Applys an attr of hoursOfDay [i] named "hour" to "this" textAreaArray
+    $(this).attr("hour", hoursOfDay[i]);
+    // Create variable assignedHour to compare each "hour" against currentHourString
+    var assignedHour = $(this).attr("hour");
+        console.log(currentHour, assignedHour);
+    // If else statements that add a class dependent on currentHourString vs assignedHour
+    if (currentHourString < assignedHour) {
+        console.log('in the future', assignedHour)
+        $(this).addClass('future');
     } 
     else if (currentHourString === assignedHour) {
         console.log('in the present', assignedHour);
         isPastLoaded = true;
-        $('textarea').addClass('present');
-        
+        $(this).addClass('present');
     } 
     else {
-        console.log('In the future', assignedHour);
-        $('textarea').addClass('future');
-    }};
+        console.log('In the past', assignedHour);
+        $(this).addClass('past');
+    };
+    });
 };
 // Work on function to render events after storage.
 function showCalendarEvents(){
