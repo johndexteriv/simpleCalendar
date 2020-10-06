@@ -77,3 +77,27 @@ body {
     clear: both;
     width: 100%;
 }
+
+@media only screen and (max-width: 780px) {
+  .saveBtn {
+      clear: both;
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 5%;
+      width: 75%;
+      height: 75%;
+      font-size: 50%;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .row {
+      clear: both;
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+      height: 90%;
+      font-size: 90%;
+  }
+}

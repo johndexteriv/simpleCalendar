@@ -1,4 +1,4 @@
-Simple Calendar Homework 5
+Simple Calendar
 
 When planner is opened 
 -	Current day is displayed at the top of the calendar

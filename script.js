@@ -40,7 +40,7 @@ $(document).ready(function () {
     };
 
     
-    // Click function for .saveBtn
+    // Click function for .saveBtn - traversed dom to locate div containing textarea
     $('.saveBtn').click(function () {
 
         
