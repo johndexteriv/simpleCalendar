@@ -16,3 +16,5 @@ When time block is clicked
 
 When page is refreshed
 -	Local storage saved data is displayed.
+
+!(Calendar Image)[calendarIMG.png]
