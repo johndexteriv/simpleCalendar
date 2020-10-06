@@ -1,85 +1,85 @@
-var jumbotronEl = document.getElementsByClassName('jumbotron');
-var currentDayEl = document.getElementById('currentDay');
-var containerEl = document.getElementsByClassName('container');
-var buttonEl = document.querySelectorAll('button');
-var textAreaEl = document.querySelectorAll('textarea');
-// Variable for current date to be displayed at top of page
-var m = moment().format('MMMM Do YYYY, h:mm:ss a');
-var theCurrentDate = m.toString();
-// Variable for hour format to be compared against hoursOfDay
-var currentHour = moment().format("HH")
-var currentHourString = currentHour.toString();
-console.log('current hour', currentHourString);
-
-// Function that displays current date in jumbotron
-function displayCurrentDate() {
-    $('#currentDay').append(theCurrentDate);
-}
-
-//Hours of day variable to be looped and attribute of 'hour' assigned to to textarea
-var hoursOfDay = ["09", "10", "11", "12", "13", "14", "15", "16", "17"];
-
-function renderCalendar() {
-  // Create variable textAreaArray to reference individual textareas
-    var textAreaArray = $('textarea');
-    // Each loop for textAreaArray
-    textAreaArray.each(function(i){
-    // Applys an attr of hoursOfDay [i] named "hour" to "this" textAreaArray
-    $(this).attr("hour", hoursOfDay[i]);
-    // Create variable assignedHour to compare each "hour" against currentHourString
-    var assignedHour = $(this).attr("hour");
-        console.log(currentHour, assignedHour);
-    // If else statements that add a class dependent on currentHourString vs assignedHour
-    if (currentHourString < assignedHour) {
-        console.log('in the future', assignedHour)
-        $(this).addClass('future');
-    } 
-    else if (currentHourString === assignedHour) {
-        console.log('in the present', assignedHour);
-        isPastLoaded = true;
-        $(this).addClass('present');
-    } 
-    else {
-        console.log('In the past', assignedHour);
-        $(this).addClass('past');
-    };
-    });
-};
-// Work on function to render events after storage.
-function showCalendarEvents(){
-var allEvents = localStorage.getItem('storedEvents');
-console.log('these are the stored events', allEvents);
-};
-// Function to save stored events.
-function saveCalendarEvents() {
-   localStorage.setItem('storedEvents', JSON.stringify(storedEvents));
-};
-// Variable to push events into
-var storedEvents = [];
-// On click save button should push text area string into storedEvents
-function submitEvents(){
-
-    $('button').on("click", function(event){
-    event.preventDefault();
-    var addEvent = $.trim($(textAreaEl).val());
-    console.log('the event', addEvent);
-
-    if (addEvent === ""){
-        return;
+$(document).ready(function () {
+    
+    if (!localStorage.getItem("savedEventsList")){
+        localStorage.setItem('savedEventsList', JSON.stringify([]));
     }
-    storedEvents.push(addEvent);
+   
+    // Variable for current date to be displayed at top of page
+    var m = moment().format('MMMM Do YYYY, h:mm:ss a');
+    var theCurrentDate = m.toString();
+    // Variable for hour format to be compared against hoursOfDay
+    var currentHour = moment().format("HH")
+    var currentHourString = currentHour.toString();
 
-    saveCalendarEvents();
-    });
-};
+
+    //Hours of day variable to be looped and attribute of 'hour' assigned to to textarea
+    var hoursOfDay = ["09", "10", "11", "12", "13", "14", "15", "16", "17"];
+
+    function renderCalendar() {
+        //Displays current date to #currentDay div
+        $('#currentDay').append(theCurrentDate);
+        // Create variable textAreaArray to reference individual textareas
+        var textAreaArray = $('textarea');
+        // Each loop for textAreaArray
+        textAreaArray.each(function (i) {
+            // Applys an attr of hoursOfDay [i] named "hour" to "this" textAreaArray
+            $(this).attr("hour", hoursOfDay[i]);
+            // Create variable assignedHour to compare each "hour" against currentHourString
+            var assignedHour = $(this).attr("hour");
+            // If else statements that add a class dependent on currentHourString vs assignedHour
+            if (currentHourString < assignedHour) {
+                $(this).addClass('future');
+            }
+            else if (currentHourString === assignedHour) {
+                $(this).addClass('present');
+            }
+            else {
+                $(this).addClass('past');
+            };
+        });
+    };
+
+    
+    // Click function for .saveBtn
+    $('.saveBtn').click(function () {
+
+        
+        //textAreasV traverses the dom to locate the parent div and then finds textarea
+        var textAreasV = $(this).parent().parent().parent().find("textarea").val();
+        //textAreaID traverses the dom to locate the parent div, finds textarea , and then sets attribute of id
+        var textareaId = $(this).parent().parent().parent().find("textarea").attr("id");
+        // console.log(textAreasV,textareaId)
+        // parses saved events
+        var savedEvents = localStorage.getItem("savedEventsList");
+        savedEvents = JSON.parse(savedEvents);
+        // pushes textAreasV & textareaID to savedEvents
+        savedEvents.push(textAreasV, textareaId)
+        // Saves item 'savedEventsList' as a string
+        localStorage.setItem('savedEventsList', JSON.stringify(savedEvents));
+        
+   
+       
+    })
 
 
-function startCalendar() {
-displayCurrentDate ();
-renderCalendar();
-submitEvents();
+    // Function to displayText
+    function displayText(){
+        // Variable localStorageVal parses savedEventsList from localstorage
+        var localStorageVal = JSON.parse(localStorage.getItem("savedEventsList"));
+        // Loops through length of localStorageVal
+        for(var i = 0; i < localStorageVal.length; i++){
+            
+            var val = localStorageVal[i];
+            var destination = localStorageVal[i+1]
+            // Applies the value of textarea(i) to the destination(i) attr
+            $(`#${destination}`).val(val)
+        }
+    }
 
-};
+    // Runs function that displays calendar time and then renders classes to each text block based off time comparison.
+    renderCalendar();
+    // Runs function to display text saved in local storage
+    displayText();    
 
-startCalendar();
 
+});
