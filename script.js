@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+    // If nothing in localStorage, set savedEventsList to epmty array
     if (!localStorage.getItem("savedEventsList")){
         localStorage.setItem('savedEventsList', JSON.stringify([]));
     }
